@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="quotes"></div>
+    <div id="author"></div>
+    <button id="newQ">new quotes</button>
+    <button id="tweetme">Tweet Me</button>
+
+
+
+
+    <script>
+        const quotes = document.getElementById("quotes");
+        const author = document.getElementById("author");
+        let quotesData = "";
+        const newQ = document.getElementById("newQ");
+        const tweetme = document.getElementById("tweetme");
+
+        let realdata = "";
+
+        const tweetnow = () => {
+            let tweetpost = `https://twitter.com/intent/tweet?text=${quotesData.text} - ${quotesData.author}`;
+            window.open(tweetpost);
+        }
+
+        const getnewQuotes = () => {
+            let rnum = Math.floor(Math.random() * 20);
+            quotesData = realdata[rnum];
+            // console.log(realdata[rnum].text);
+            // console.log(realdata[rnum].author);
+            quotes.innerText = quotesData.text;
+            author.innerText = quotesData.author;
+            if (quotesData.author == null) {
+                quotes.innerText = quotesData.text;
+                author.innerText = "unknown";
+            }
+            else {
+                quotes.innerText = quotesData.text;
+                author.innerText = quotesData.author;
+            }
+        };
+
+        const getQuotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+
+                const data = await fetch(api);
+                realdata = await data.json();
+                getnewQuotes();
+                // console.log(realdata.length);
+                // console.log(realdata[0].text);
+                // console.log(realdata[0].author);
+            }
+            catch (error) { }
+        }
+        tweetme.addEventListener("click", tweetnow);
+        newQ.addEventListener("click", getnewQuotes);
+        getQuotes();
+    </script>
+</body>
+
+</html>
